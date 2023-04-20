@@ -21,6 +21,7 @@ export default class Customer {
   //_address: string = ""; // atributo sem expressividade, tipo primario
   private _address!: Address;
   private _active: boolean = false;
+  private _rewardPoints: number = 0;
 
   constructor(id: string, name: string) {
     this._id = id;
@@ -40,14 +41,21 @@ export default class Customer {
     return this._name;
   }
 
+  get id(): string{
+    return this._id;
+  }
+
+  get rewardPoints(): number {
+    return this._rewardPoints;
+  }
+
   //entidade sempre vai se autovalidar
   validate() {
     if (this._id.length === 0) {
-      throw new Error('Id is required');
+      throw new Error("Id is required");
     }
-
     if (this._name.length === 0) {
-      throw new Error('Name is required');
+      throw new Error("Name is required");
     }
   }
 
@@ -55,6 +63,10 @@ export default class Customer {
   changeName(name: string) {
     this._name = name;
     this.validate();
+  }
+
+  isActive(): boolean {
+    return this._active;
   }
 
   activate() {
@@ -67,10 +79,12 @@ export default class Customer {
   deactivate() {
     this._active = false;
   }
+
+  addRewardsPoint(points: number) {
+    return this._rewardPoints += points;
+  }
+
   set Address(address: Address) {
     this._address = address; 
   }
 }
-
-let customer = new Customer("123", "");
-console.log(customer);
