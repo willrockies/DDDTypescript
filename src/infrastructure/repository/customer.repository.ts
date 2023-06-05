@@ -6,27 +6,80 @@ import CustomerModel from "../db/sequelize/model/customer.model";
 export default class CustomerRepository implements CustomerRepositoryInterface {
 
   async create(entity: Customer): Promise<void> {
-    const address = new Address('Rua dois', 2, '12345-678', 'São Paulo' );
+
     await CustomerModel.create({
       id: entity.id,
       name: entity.name,
-      street: address.street,
-      number: address.number,
-      zipcode: address.zip,
-      city: address.city,
+      street: entity.Address.street,
+      number: entity.Address.number,
+      zipcode: entity.Address.zip,
+      city: entity.Address.city,
       active: entity.isActive(),
       rewardPoints: entity.rewardPoints,
     })
   }
 
-  update(entity: Customer): Promise<void> {
-    throw new Error("Method not implemented.");
+  async update(entity: Customer): Promise<void> {
+    await CustomerModel.update(
+      {
+        name: entity.name,
+        street: entity.Address.street,
+        number: entity.Address.number,
+        zipcode: entity.Address.zip,
+        city: entity.Address.city,
+        active: entity.isActive(),
+        rewardPoints: entity.rewardPoints,
+      },
+      {
+        where: {
+          id: entity.id,
+        },
+      }
+    );
   }
-  find(id: string): Promise<Customer> {
-    throw new Error("Method not implemented.");
+  async find(id: string): Promise<Customer> {
+    let customerModel;
+    try {
+      customerModel = await CustomerModel.findOne({
+        where: {
+          id,
+        },
+        rejectOnEmpty: true,
+      });
+    } catch (error) {
+      throw new Error("Customer not found");
+    }
+
+    const customer = new Customer(id, customerModel.name);
+    const address = new Address(
+      customerModel.street,
+      customerModel.number,
+      customerModel.zipcode,
+      customerModel.city
+    );
+    customer.changeAddress(address);
+    return customer;
   }
-  findAll(): Promise<Customer[]> {
-    throw new Error("Method not implemented.");
+  async findAll(): Promise<Customer[]> {
+    const customerModels = await CustomerModel.findAll();
+
+    const customers = customerModels.map((customerModels) => {
+      let customer = new Customer(customerModels.id, customerModels.name);
+      customer.addRewardsPoint(customerModels.rewardPoints);
+      const address = new Address(
+        customerModels.street,
+        customerModels.number,
+        customerModels.zipcode,
+        customerModels.city
+      );
+      customer.changeAddress(address);
+      if (customerModels.active) {
+        customer.activate();
+      }
+      return customer;
+    });
+
+    return customers;
   }
 
 }
