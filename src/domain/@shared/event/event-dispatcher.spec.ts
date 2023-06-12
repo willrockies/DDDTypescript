@@ -57,7 +57,7 @@ describe("Domain events tests", () => {
   it("should notify all event handlers", () => {
     const eventDispatcher = new EventDispatcher();
     const eventHandler = new SendEmailWhenProductIsCreatedHandler();
-    const spyEventHandler = jest.spyOn(eventHandler, "handle");
+    const spyEventHandler = jest.spyOn(eventHandler, "handle"); // "handle" é o handle implementado na class SendEmailWhenProductIsCreatedHandler"
 
     eventDispatcher.register("ProductCreatedEvent", eventHandler);
 
