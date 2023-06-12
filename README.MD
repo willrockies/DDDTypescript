@@ -13,3 +13,7 @@
 # - Registrar o Evento, juntamente com o Handler no "Event Dispatcher"
 
 # Agora para um evento, basta executar o método "notify" do "Event Dispatcher". Nesse momento todos os handlers registrados no evento serão executados
+
+## Factory
+#  method factory -
+#  abstract factory - 
