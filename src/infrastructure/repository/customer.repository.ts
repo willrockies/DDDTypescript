@@ -4,30 +4,28 @@ import CustomerRepositoryInterface from "../../domain/repository/customer-reposi
 import CustomerModel from "../db/sequelize/model/customer.model";
 
 export default class CustomerRepository implements CustomerRepositoryInterface {
+  
   async create(entity: Customer): Promise<void> {
-    const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
-
     await CustomerModel.create({
       id: entity.id,
       name: entity.name,
-      street: address.street,
-      number: address.number,
-      zipcode: address.zip,
-      city: address.city,
+      street: entity.Address.street,
+      number: entity.Address.number,
+      zipcode: entity.Address.zip,
+      city: entity.Address.city,
       active: entity.isActive(),
       rewardPoints: entity.rewardPoints,
-    })
+    });
   }
 
   async update(entity: Customer): Promise<void> {
-    const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
     await CustomerModel.update(
       {
         name: entity.name,
-        street: address.street,
-        number: address.number,
-        zipcode: address.zip,
-        city: address.city,
+        street: entity.Address.street,
+        number: entity.Address.number,
+        zipcode: entity.Address.zip,
+        city: entity.Address.city,
         active: entity.isActive(),
         rewardPoints: entity.rewardPoints,
       },

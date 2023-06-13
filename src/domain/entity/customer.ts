@@ -37,11 +37,11 @@ export default class Customer {
     this._name = name;
   } */
 
-  get name(): string{
+  get name(): string {
     return this._name;
   }
 
-  get id(): string{
+  get id(): string {
     return this._id;
   }
 
@@ -87,8 +87,11 @@ export default class Customer {
   addRewardsPoint(points: number) {
     return this._rewardPoints += points;
   }
-
+  
+  get Address(): Address {
+    return this._address;
+  }
   set Address(address: Address) {
-    this._address = address; 
+    this._address = address;
   }
 }
